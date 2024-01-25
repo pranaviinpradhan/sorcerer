@@ -106,16 +106,19 @@ const TextEditor = () => {
           )}
         </div>
         <div>
-          <button onClick={handleSave} className="button-2">
+          <button onClick={handleSave} className="button">
             Save
           </button>
         </div>
       </Center>
-      <Center
+      <div
         style={{
           border: "1px solid skyblue",
-          height: isDesktop ? "100px" : "",
+          height: isDesktop ? "600px" : "",
           margin: isDesktop ? "10px 150px" : "10px 10px",
+          overflow: "scroll",
+          textAlign: "left",
+          padding: "10px",
         }}
       >
         <Editor
@@ -123,8 +126,9 @@ const TextEditor = () => {
           onChange={handleEditorChange}
           customStyleMap={styleMap}
           placeholder="Type something..."
+          style={{ textAlign: "left" }}
         />
-      </Center>
+      </div>
     </div>
   );
 };
