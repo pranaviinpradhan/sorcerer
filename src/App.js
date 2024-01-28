@@ -14,6 +14,7 @@ import { useScreenDetector } from "./useScreenDetector";
 const TextEditor = () => {
   const { isMobile, isTablet, isDesktop } = useScreenDetector();
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [formattedContent, setFormattedContent] = useState("");
 
   useEffect(() => {
     // Load content from local storage on page refresh
@@ -23,6 +24,7 @@ const TextEditor = () => {
       setEditorState(EditorState.createWithContent(contentState));
     }
   }, []);
+  console.log(editorState.getCurrentContent().getPlainText(), "editor state");
 
   const handleSave = () => {
     // Save content to local storage
@@ -36,20 +38,22 @@ const TextEditor = () => {
     const contentState = newEditorState.getCurrentContent();
     const plainText = contentState.getPlainText();
     console.log(plainText, "plainText");
-    if (plainText.endsWith("\n")) {
-      // Clear the content if Enter is pressed at the beginning of a line
-      setEditorState(EditorState.createEmpty());
-      return;
-    }
-    // Heading format for lines starting with #
+
+
     if (plainText.startsWith("# ")) {
       const updatedContentState = ContentState.createFromText(
         plainText.substring(2)
       );
       const newState = EditorState.createWithContent(updatedContentState);
       setEditorState(RichUtils.toggleBlockType(newState, "header-one"));
+      console.log(
+        convertToRaw(editorState.getCurrentContent()),
+        "current content"
+      );
       return;
     }
+    // Other formatting rules...
+    setEditorState(newEditorState);
 
     // Bold format for lines starting with *
     if (plainText.startsWith("* ")) {
@@ -105,6 +109,7 @@ const TextEditor = () => {
             <h5>Demo editor by Pranavi Pradhan</h5>
           )}
         </div>
+
         <div>
           <button onClick={handleSave} className="button">
             Save
@@ -113,7 +118,7 @@ const TextEditor = () => {
       </Center>
       <div
         style={{
-          border: "1px solid skyblue",
+          border: "4px solid skyblue",
           height: isDesktop ? "600px" : "",
           margin: isDesktop ? "10px 150px" : "10px 10px",
           overflow: "scroll",
